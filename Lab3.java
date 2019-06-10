@@ -16,10 +16,16 @@ public class Lab3
     
   public static void lightCandles()
   {
-    //insert instructions below
-  
-  
-  
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
+    checkCandle();
   }
   
   //Run this method to test completeRoom on map room1.txt
@@ -41,10 +47,10 @@ public class Lab3
   //Complete this method.  You will need to write additional helper methods.
   public static void completeRoom()
   {
-    //insert instructions below
-  
-  
-  
+    checkSide();
+    checkSide();
+    checkSide();
+    checkSide();
   }
   
   //Run this method to test swapAll on map swap1.txt
@@ -66,10 +72,16 @@ public class Lab3
   //Complete this method.  You will need to write additional helper methods.
   public static void swapAll()
   {
-    //insert instructions below
-  
-  
-  
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapRow();
+    swapSquares();
   }
   
   //Don't run these. I will!
@@ -114,4 +126,189 @@ public class Lab3
     Robot.setDelay(0.05);
     swapAll();
   }
+  //precondition: the candle is unlit and the robot is to the left of it
+  //postcondition: the candle is lit and the robot is to the right of it.
+  public static void lightCandle()
+  {
+    Robot.move();
+    Robot.makeDark();
+    Robot.move();
+    }
+  //precondition: the robot is facing a certain direction
+  //postcondition: the robot is facing 90 degrees right relative to that direction
+  public static void turnRight()
+  {
+    Robot.turnLeft();
+    Robot.turnLeft();
+    Robot.turnLeft();
+    }
+  //precondition: the robot is likely looking ahead at nothing
+  //postcondition: the robot has moved down one space, facing the same way
+  public static void moveDown()
+  {
+    turnRight();
+    Robot.move();
+    Robot.turnLeft();
+    }
+  //precondition: the robot is likely staring at a wall
+  //postcondition: the robot has moved up one space, facing the same way
+  public static void moveUp()
+  {
+    Robot.turnLeft();
+    Robot.move();
+    turnRight();
+    }
+  public static void checkCandle()
+  {
+    if (Robot.frontIsClear())
+      {
+        moveDown();
+        if (Robot.frontIsClear())
+        {
+        lightCandle();
+        }
+        else
+        {
+        moveUp();
+        lightCandle();
+        }
+        }
+      else
+      {
+        moveUp();
+        if(Robot.frontIsClear())
+        {
+        lightCandle();
+        }
+        else
+        {
+        moveUp();
+        lightCandle();
+        }
+    }
+  }
+  public static void checkSquare()
+  {
+    Robot.turnLeft();
+    if (Robot.frontIsClear())
+    {
+    Robot.move();
+    if (Robot.onDark())
+    {
+    goBack();
+    }
+    else
+    {
+    Robot.makeDark();
+    goBack();
+    }
+    }
+    else
+    {
+    turnRight();
+    }
+    }
+  //precondition: facing a wall on the outside
+  //postcondition: facing 90 degrees right, one space back
+  public static void goBack()
+  {
+    turnRight();
+    turnRight();
+    Robot.move();
+    Robot.turnLeft();
+    }
+  //precondition: side is not necessarily "clean"
+  //postcondition: side is "clean"
+  public static void checkSide()
+  {
+    checkSquare();
+    Robot.move();
+    checkSquare();
+    Robot.move();
+    checkSquare();
+    Robot.move();
+    checkSquare();
+    Robot.move();
+    checkSquare();
+    turnRight();
+    }
+  //precondition: the robot is facing a certain direction
+  //postcondition: the robot is facing 180 degrees relative to that direction
+  public static void turnAround()
+  {
+    turnRight();
+    turnRight();
+    }
+  //precondition: squares are positioned a certain way
+  //postcondition: positions of the squares have been switched
+  public static void swapSquares()
+  {
+    Robot.turnLeft();
+    Robot.move();
+    if (Robot.onDark())
+    {
+    otherSide();
+    if (Robot.onDark())
+    {
+    nextRow();
+    }
+    else
+    {
+    swapDarkThenLight();
+    }
+    }
+    else
+    {
+    otherSide();
+    if (Robot.onDark())
+    {
+    swapLightThenDark();
+    }
+    else
+    {
+    nextRow();
+    }
+    }
+    }
+  //precondition: facing a wall on the outside
+  //postcondition: facing 90 degrees right, one space back
+  public static void nextRow()
+  {
+    turnAround();
+    Robot.move();
+    turnRight();
+    }
+  //precondition: robot is on one side of the room, facing a wall
+  //psotcondition: robot is on the other side of the room, facing the wall
+  public static void otherSide()
+  {
+    turnAround();
+    Robot.move();
+    Robot.move();
+    }
+  //precondition: squares are positioned a certain way
+  //postcondition: positions of the squares have been switched
+  public static void swapRow()
+  {
+    swapSquares();
+    Robot.move();
+    }
+  //precondition: two squares are light and dark
+  //postcondition: two squares are now dark and light
+  public static void swapDarkThenLight()
+  {
+    Robot.makeDark();
+    otherSide();
+    Robot.makeLight();
+    goBack();
+    }
+  //precondition: two squares are dark and light
+  //postcondition: two squares are now light and dark
+  public static void swapLightThenDark()
+  {
+    Robot.makeLight();
+    otherSide();
+    Robot.makeDark();
+    goBack();
+    }
 }
